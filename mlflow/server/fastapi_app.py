@@ -25,6 +25,7 @@ from mlflow.server.asgi_utils import get_routed_asgi_path
 from mlflow.server.assistant.api import assistant_router
 from mlflow.server.fastapi_security import init_fastapi_security
 from mlflow.server.gateway_api import gateway_router
+from mlflow.server.handlers import _add_static_prefix
 from mlflow.server.job_api import job_api_router
 from mlflow.server.otel_api import otel_router
 from mlflow.server.workspace_helpers import (
@@ -172,7 +173,7 @@ def create_fastapi_app(flask_app: Flask = flask_app):
 
     # Include OpenTelemetry API router BEFORE mounting Flask app
     # This ensures FastAPI routes take precedence over the catch-all Flask mount
-    fastapi_app.include_router(otel_router)
+    fastapi_app.include_router(otel_router, prefix=_add_static_prefix(""))
 
     fastapi_app.include_router(job_api_router)
 
